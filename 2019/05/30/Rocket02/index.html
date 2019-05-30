@@ -1,0 +1,69 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta name="generator" content="Hexo 3.8.0"><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description"><title>Rocket02 | 西油骄子</title><link rel="stylesheet" type="text/css" href="//fonts.loli.net/css?family=Source+Code+Pro"><link rel="stylesheet" type="text/css" href="/debug.github.io/css/style.css?v=2.0.3"><link rel="stylesheet" type="text/css" href="/debug.github.io/css/highlight.css?v=2.0.3"><link rel="Shortcut Icon" href="/debug.github.io/favicon.ico"><link rel="bookmark" href="/debug.github.io/favicon.ico"><link rel="apple-touch-icon" href="/debug.github.io/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/debug.github.io/apple-touch-icon.png"><link rel="alternate" type="application/atom+xml" href="/debug.github.io/atom.xml"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">Rocket02</h1><a id="logo" href="/debug.github.io/.">西油骄子</a><p class="description"></p></div><div id="nav-menu"><a href="/debug.github.io/." class="current"><i class="fa fa-home"> 首页</i></a><a href="/debug.github.io/archives/"><i class="fa fa-archive"> 博文目录</i></a><a href="/debug.github.io/about/"><i class="fa fa-user"> 简介</i></a><a href="/debug.github.io/atom.xml"><i class="fa fa-rss"> 订阅</i></a></div><div id="search-form"><div id="result-mask" class="hide"></div><label><input id="search-key" type="text" autocomplete="off" placeholder="搜索"></label><div id="result-wrap" class="hide"><div id="search-result"></div></div><div class="hide"><template id="search-tpl"><div class="item"><a href="/{path}" title="{title}"><div class="title">{title}</div><div class="time">{date}</div><div class="tags">{tags}</div></a></div></template></div></div></div><div id="layout" class="layout-g"><div class="layout-l"><div class="content_container"><div class="post"><h1 class="post-title">Rocket02</h1><div class="post-meta"><a href="/debug.github.io/2019/05/30/Rocket02/#comments" class="comment-count"></a><p><span class="date">May 30, 2019</span><span><i id="busuanzi_container_page_pv"><i id="busuanzi_value_page_pv"></i><i>点击</i></i></span></p></div><div class="post-content"><h1 id="消息队列RocketMQ"><a href="#消息队列RocketMQ" class="headerlink" title="消息队列RocketMQ"></a>消息队列RocketMQ</h1><p>网址：<a href="https://help.aliyun.com/document_detail/29532.html?spm=a2c4g.11186623.6.542.79f9793fBwdeC7" target="_blank" rel="noopener">https://help.aliyun.com/document_detail/29532.html?spm=a2c4g.11186623.6.542.79f9793fBwdeC7</a><br>本文章是学习了阿里云大佬们自己编写的资料，进行自己总结的，消息对接是阿里集团自主研发的专业消息中间件，提供了消息的订阅和发布、消息轨迹查询以及定时(延迟)消息、资源统计、监控报警等一系列的消息云服务，同时具备海量消息堆积、高吞吐、可靠重试等互联网应用所需的特性，是阿里巴巴双11使用的核心产品。</p>
+<h2 id="RocketMQ产品功能简洁"><a href="#RocketMQ产品功能简洁" class="headerlink" title="RocketMQ产品功能简洁"></a>RocketMQ产品功能简洁</h2><p>当你想熟悉一个新框架应用时，你最好是先了解下这个产品有哪些功能，改产品是如何进行工作的，才能更加彻底的深入学习</p>
+<h3 id="产品功能结构图"><a href="#产品功能结构图" class="headerlink" title="产品功能结构图"></a>产品功能结构图</h3><p><img src="../Rocket02/funcation.PNG" alt="Alt text"></p>
+<h3 id="消息接收模型"><a href="#消息接收模型" class="headerlink" title="消息接收模型"></a>消息接收模型</h3><p>RocketMQ支持消息“发布、订阅模式”，生产者将一条信息发送到服务器的某一个主题（Topic）上，多个消息接收方（消费者）订阅这个主题以及接收消息，以下是主题（Topic）。</p>
+<p><img src="../Rocket02/02.png" alt="Alt text"></p>
+<h2 id="名词解释"><a href="#名词解释" class="headerlink" title="名词解释"></a>名词解释</h2><ul>
+<li>Topic：消息主题，一级消息类型，通过topic对消息进行分类</li>
+<li>Tag: 消息标签，二级消息类型，用来进一步区分topic下的消息分类</li>
+<li>Message: 作为承载消息的载体。</li>
+<li>Message ID： 消息的全局唯一标识，有消息队列MQ系统自动生产的，唯一标识某条信息。</li>
+<li>Message Key: 由生产者主动生产，作为业务的唯一标识。</li>
+<li>producer: 消息生产者，负责生产和发送信息。</li>
+<li>producer实例： Producer 的一个对象实例，不同的 Producer 实例可以运行在不同进程内或者不同机器上。Producer 实例线程安全，可在同一进程内多线程之间共享</li>
+<li>Consumer：消息消费者，也称为消息订阅者，负责接收并消费消息</li>
+<li>Consumer 实例： Consumer 的一个对象实例，不同的 Consumer 实例可以运行在不同进程内或者不同机器上。一个 Consumer 实例内配置线程池消费消息</li>
+<li>Group</li>
+</ul>
+<p>一类 Producer 或 Consumer，这类 Producer 或 Consumer 通常生产或消费同一类消息，且消息发布或订阅的逻辑一致。</p>
+<ul>
+<li><p>Group ID<br>Group 的标识。</p>
+</li>
+<li><p>Exactly-Once 投递语义<br>Exactly-Once 投递语义是指发送到消息系统的消息只能被消费端处理且仅处理一次，即使生产端重试消息发送导致某消息重复投递，该消息也在消费端也只被消费一次。详情请见Exactly-Once 投递语义。</p>
+</li>
+<li><p>集群消费<br>一个 Group ID 所标识的所有 Consumer 平均分摊消费消息。例如某个 Topic 有 9 条消息，一个 Group ID 有 3 个 Consumer 实例，那么在集群消费模式下每个实例平均分摊，只消费其中的 3 条消息。详情请见集群消费和广播消费。</p>
+</li>
+<li><p>广播消费<br>一个 Group ID 所标识的所有 Consumer 都会各自消费某条消息一次。例如某个 Topic 有 9 条消息，一个 Group ID 有 3 个 Consumer 实例，那么在广播消费模式下每个实例都会各自消费 9 条消息。详情请见集群消费和广播消费。</p>
+</li>
+<li><p>定时消息<br>Producer 将消息发送到消息队列 RocketMQ 服务端，但并不期望这条消息立马投递，而是推迟到在当前时间点之后的某一个时间投递到 Consumer 进行消费，该消息即定时消息。详情请见定时和延时消息。</p>
+</li>
+<li><p>延时消息<br>Producer 将消息发送到消息队列 RocketMQ 服务端，但并不期望这条消息立马投递，而是延迟一定时间后才投递到 Consumer 进行消费，该消息即延时消息。详情请见定时和延时消息。</p>
+</li>
+<li><p>事务消息<br>消息队列 RocketMQ 提供类似 X/Open XA 的分布事务功能，通过消息队列 RocketMQ 的事务消息能达到分布式事务的最终一致。详情请见事务消息。</p>
+</li>
+<li><p>顺序消息<br>消息队列 RocketMQ 提供的一种按照顺序进行发布和消费的消息类型, 分为全局顺序消息和分区顺序消息。详情请见顺序消息。</p>
+</li>
+<li><p>全局顺序消息<br>对于指定的一个 Topic，所有消息按照严格的先入先出（FIFO）的顺序进行发布和消费。详情请见顺序消息。</p>
+</li>
+<li><p>分区顺序消息<br>对于指定的一个 Topic，所有消息根据 sharding key 进行区块分区。同一个分区内的消息按照严格的 FIFO 顺序进行发布和消费。Sharding key 是顺序消息中用来区分不同分区的关键字段，和普通消息的 key 是完全不同的概念。详情请见顺序消息。</p>
+</li>
+<li><p>消息堆积<br>Producer 已经将消息发送到消息队列 RocketMQ 的服务端，但由于 Consumer 消费能力有限，未能在短时间内将所有消息正确消费掉，此时在消息队列 RocketMQ 的服务端保存着未被消费的消息，该状态即消息堆积。</p>
+</li>
+<li><p>消息过滤<br>消费者可以根据消息标签（Tag）对消息进行过滤，确保消费者最终只接收被过滤后的消息类型。消息过滤在消息队列 RocketMQ 的服务端完成。详情请见消息过滤。</p>
+</li>
+<li><p>消息轨迹<br>在一条消息从生产者发出到订阅者消费处理过程中，由各个相关节点的时间、地点等数据汇聚而成的完整链路信息。通过消息轨迹，您能清晰定位消息从生产者发出，经由消息队列 RocketMQ 服务端，投递给消息消费者的完整链路，方便定位排查问题。详情请见消息轨迹简介。</p>
+</li>
+<li><p>重置消费位点<br>以时间轴为坐标，在消息持久化存储的时间范围内（默认 3 天），重新设置消息消费者对其订阅 Topic 的消费进度，设置完成后订阅者将接收设定时间点之后由消息生产者发送到消息队列 RocketMQ 服务端的消息。详情请见重置消费位点。</p>
+</li>
+<li><p>死信队列</p>
+</li>
+</ul>
+<p>死信队列用于处理无法被正常消费的消息。当一条消息初次消费失败，消息队列 RocketMQ 会自动进行消息重试；达到最大重试次数后，若消费依然失败，则表明消费者在正常情况下无法正确地消费该消息，此时，消息队列 RocketMQ 不会立刻将消息丢弃，而是将其发送到该消费者对应的特殊队列中。<br>消息队列 RocketMQ 将这种正常情况下无法被消费的消息称为死信消息（Dead-Letter Message），将存储死信消息的特殊队列称为死信队列（Dead-Letter Queue）。<br>详情请见死信队列。</p>
+<ul>
+<li>消息路由<br>消息路由常用于不同地域之间的消息同步，保证地域之间的数据一致性。消息队列 RocketMQ 的全球消息路由功能依托阿里云优质基础设施实现的高速通道专线，可以高效地实现国内外不同地域之间的消息同步复制。详情请见全球消息路由。</li>
+</ul>
+<h2 id="总结："><a href="#总结：" class="headerlink" title="总结："></a>总结：</h2><blockquote>
+<p>学习一个新的产品，概念是极其的重要，所以记住概念是有必要的。</p>
+</blockquote>
+</div><div class="post-copyright"><blockquote><p>原文作者: John Doe</p><p>原文链接: <a href="https://debug20121104.github.io/debug.github.io/2019/05/30/Rocket02/">https://debug20121104.github.io/debug.github.io/2019/05/30/Rocket02/</a></p><p>版权声明: 转载请注明出处(必须保留作者署名及链接)</p></blockquote></div><div class="tags"></div><div class="post-share"><div class="social-share"><span>分享到:</span></div></div><div class="post-nav"><a href="/debug.github.io/2019/05/29/Rocket-01结果/" class="next">Rocket--(1)spingboot+rocket实战应用</a></div><div id="comments"><div id="container"><link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css?v=2.0.3"><script type="text/javascript" src="https://unpkg.com/gitalk/dist/gitalk.min.js?v=2.0.3"></script><script type="text/javascript" src="//cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js?v=2.0.3"></script><script>var gitalk = new Gitalk({
+  clientID: '',
+  clientSecret: '',
+  repo: '',
+  owner: '',
+  admin: [''],
+  id: md5(window.location.pathname),
+  distractionFreeMode: false,
+  language: 'fr-FR',
+  pagerDirection: 'last'
+})
+gitalk.render('container')</script></div></div></div></div></div><div class="layout-r"><div id="sidebar"><div class="search-pla"></div><div id="toc" class="widget"><div class="widget-title"><i class="fa fa-fei">文章目录</i></div><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#消息队列RocketMQ"><span class="toc-text">消息队列RocketMQ</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#RocketMQ产品功能简洁"><span class="toc-text">RocketMQ产品功能简洁</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#产品功能结构图"><span class="toc-text">产品功能结构图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#消息接收模型"><span class="toc-text">消息接收模型</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#名词解释"><span class="toc-text">名词解释</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结："><span class="toc-text">总结：</span></a></li></ol></li></ol></div><div class="widget"><div class="widget-title"><i class="fa fa-xie"> 最新文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/debug.github.io/2019/05/30/Rocket02/">Rocket02</a></li><li class="post-list-item"><a class="post-list-link" href="/debug.github.io/2019/05/29/Rocket-01结果/">Rocket--(1)spingboot+rocket实战应用</a></li><li class="post-list-item"><a class="post-list-link" href="/debug.github.io/2019/05/29/hello-debug/">Hello Hexo</a></li><li class="post-list-item"><a class="post-list-link" href="/debug.github.io/2019/05/29/hello-world/">Hello World</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-biao"> 标签</i></div><div class="tagcloud"></div></div><div class="widget"><div class="widget-title"><i class="fa fa-archive"> 月份归档</i></div><ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/debug.github.io/archives/2019/05/">五月 2019</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-you"> 友情链接</i></div><ul></ul><a href="http://www.example1.com/" title="site-name1" target="_blank">site-name1</a><ul></ul><a href="http://www.example2.com/" title="site-name2" target="_blank">site-name2</a><ul></ul><a href="http://www.example3.com/" title="site-name3" target="_blank">site-name3</a></div></div></div></div><a id="totop" href="#top"></a><div id="footer"><div class="footer-info"><p><a href="/debug.github.io/baidusitemap.xml">网站地图</a> |  <a href="/debug.github.io/atom.xml">订阅本站</a> |  <a href="/debug.github.io/about/">联系博主</a></p><p>本站总访问量：<i id="busuanzi_container_site_pv"><i id="busuanzi_value_site_pv"></i></i>次，本站总访客数:<i id="busuanzi_container_site_uv"><i id="busuanzi_value_site_uv"></i></i>人</p><p><span> Copyright &copy;<a href="/debug.github.io/." rel="nofollow">John Doe.</a></span><span> Theme by<a rel="nofollow" target="_blank" href="https://github.com/chaooo/hexo-theme-BlueLake"> BlueLake.</a></span><span> Count by<a href="http://busuanzi.ibruce.info/"> busuanzi.</a></span><span> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a></span></p></div></div></div><script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script type="text/javascript" src="/debug.github.io/js/search.json.js?v=2.0.3"></script><script type="text/javascript" src="/debug.github.io/js/toctotop.js?v=2.0.3" async></script><link rel="stylesheet" type="text/css" href="/debug.github.io/share/css/share.css"><script type="text/javascript" src="/debug.github.io/share/js/social-share.js" charset="utf-8"></script><script type="text/javascript" src="/debug.github.io/share/js/qrcode.js" charset="utf-8"></script></body></html>
